@@ -1,9 +1,11 @@
 #![no_std]
 #![no_main]
 
+use core::fmt::Debug;
+
 #[derive(Clone, Copy)]
 pub struct Mmio {
-    pub address: usize,
+    address: usize,
 }
 
 impl Mmio {
@@ -11,33 +13,45 @@ impl Mmio {
         Self { address }
     }
 
-    pub fn write_u8(&mut self, value: u8, offset: usize) {
+    pub fn address(&self) -> usize {
+        self.address
+    }
+
+    pub unsafe fn write_u8(&mut self, value: u8, offset: usize) {
         let ptr = (self.address + offset) as *mut u8;
 
-        unsafe { ptr.write_volatile(value) };
+        ptr.write_volatile(value);
     }
 
-    pub fn write_u32(&mut self, value: u32, offset: usize) {
+    pub unsafe fn write_u32(&mut self, value: u32, offset: usize) {
         let ptr = (self.address + offset) as *mut u32;
 
-        unsafe { ptr.write_volatile(value) };
+        ptr.write_volatile(value);
     }
 
-    pub fn read_u8(&self, offset: usize) -> u8 {
+    pub unsafe fn read_u8(&self, offset: usize) -> u8 {
         let ptr = (self.address + offset) as *const u8;
 
-        unsafe { ptr.read_volatile() }
+        ptr.read_volatile()
     }
 
-    pub fn read_u16(&self, offset: usize) -> u16 {
+    pub unsafe fn read_u16(&self, offset: usize) -> u16 {
         let ptr = (self.address + offset) as *const u16;
 
-        unsafe { ptr.read_volatile() }
+        ptr.read_volatile()
     }
 
-    pub fn read_u32(&self, offset: usize) -> u32 {
+    pub unsafe fn read_u32(&self, offset: usize) -> u32 {
         let ptr = (self.address + offset) as *const u32;
 
-        unsafe { ptr.read_volatile() }
+        ptr.read_volatile()
+    }
+}
+
+impl Debug for Mmio {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Mmio")
+            .field("address", &format_args!("{:#016X}", self.address))
+            .finish()
     }
 }

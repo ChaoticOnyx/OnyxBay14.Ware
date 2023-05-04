@@ -1,0 +1,7 @@
+[package]
+name = "tts"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+drivers-pci = { path = "../pci", package = "pci" }

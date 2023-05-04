@@ -30,7 +30,7 @@ _start:
 	li t0, 0b11 << 11 | (1 << 13)
 	csrw mstatus, t0
 
-    jal zero, _start_rust
+	jal zero, _start_rust
 3:
 	wfi
 	j 3b
