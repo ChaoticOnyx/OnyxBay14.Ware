@@ -1,0 +1,28 @@
+[package]
+name = "space_invaders"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+riscv = "0.10.1"
+riscv-rt = "0.11.0"
+pci = { path = "../../OnyxBay14.Drivers/pci", package = "pci" }
+gpu = { path = "../../OnyxBay14.Drivers/gpu", package = "gpu" }
+rtc = { path = "../../OnyxBay14.Drivers/rtc", package = "rtc" }
+heap = { path = "../../OnyxBay14.Drivers/heap", package = "heap" }
+hid = { path = "../../OnyxBay14.Drivers/hid", package = "hid" }
+plic = { path = "../../OnyxBay14.Drivers/plic", package = "plic" }
+screen = { path = "../../OnyxBay14.Drivers/screen", package = "screen" }
+
+[build-dependencies]
+image = "0.24.6"
+
+[profile.dev]
+lto = true
+strip = true
+opt-level = "z"
+
+[profile.release]
+lto = true
+strip = true
+opt-level = "z"
