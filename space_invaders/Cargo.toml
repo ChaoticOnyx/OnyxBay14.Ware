@@ -6,13 +6,13 @@ edition = "2021"
 [dependencies]
 riscv = "0.10.1"
 riscv-rt = "0.11.0"
-pci = { path = "../../OnyxBay14.Drivers/pci", package = "pci" }
-gpu = { path = "../../OnyxBay14.Drivers/gpu", package = "gpu" }
-rtc = { path = "../../OnyxBay14.Drivers/rtc", package = "rtc" }
-heap = { path = "../../OnyxBay14.Drivers/heap", package = "heap" }
-hid = { path = "../../OnyxBay14.Drivers/hid", package = "hid" }
-plic = { path = "../../OnyxBay14.Drivers/plic", package = "plic" }
-screen = { path = "../../OnyxBay14.Drivers/screen", package = "screen" }
+pci = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "pci" }
+gpu = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "gpu" }
+rtc = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "rtc" }
+heap = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "heap" }
+hid = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "hid" }
+plic = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "plic" }
+screen = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "screen" }
 
 [build-dependencies]
 image = "0.24.6"

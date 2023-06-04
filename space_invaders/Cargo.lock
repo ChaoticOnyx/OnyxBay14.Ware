@@ -231,6 +231,7 @@ dependencies = [
 [[package]]
 name = "gpu"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "pci",
 ]
@@ -247,6 +248,7 @@ dependencies = [
 [[package]]
 name = "heap"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "linked_list_allocator",
 ]
@@ -263,6 +265,7 @@ dependencies = [
 [[package]]
 name = "hid"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "pci",
 ]
@@ -375,6 +378,7 @@ dependencies = [
 [[package]]
 name = "mmio"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "paste",
 ]
@@ -458,6 +462,7 @@ checksum = "9f746c4065a8fa3fe23974dd82f15431cc8d40779821001404d10d2e79ca7d79"
 [[package]]
 name = "pci"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "mmio",
 ]
@@ -485,6 +490,7 @@ dependencies = [
 [[package]]
 name = "plic"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "mmio",
 ]
@@ -621,6 +627,7 @@ dependencies = [
 [[package]]
 name = "rtc"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "mmio",
 ]
@@ -634,6 +641,7 @@ checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 [[package]]
 name = "screen"
 version = "0.1.0"
+source = "git+https://github.com/ChaoticOnyx/OnyxBay14.Drivers#3d5b157b3dac39bb48a75d23e3f14ad2eae6bc20"
 dependencies = [
  "pci",
 ]
