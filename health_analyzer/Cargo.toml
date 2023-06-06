@@ -1,0 +1,23 @@
+[package]
+name = "health_analyzer_fw"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+riscv = "0.10.1"
+riscv-rt = "0.11.0"
+sgl = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "sgl" }
+bsod = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "bsod" }
+plic = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "plic" }
+pci = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "pci" }
+heap = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "heap" }
+health_analyzer = { git = "https://github.com/ChaoticOnyx/OnyxBay14.Drivers", package = "health_analyzer" }
+
+[build-dependencies]
+image = "0.24.6"
+
+[profile.dev]
+strip = true
+
+[profile.release]
+strip = true

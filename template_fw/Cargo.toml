@@ -6,3 +6,9 @@ edition = "2021"
 [dependencies]
 riscv = "0.10.1"
 riscv-rt = "0.11.0"
+
+[profile.dev]
+strip = true
+
+[profile.release]
+strip = true
