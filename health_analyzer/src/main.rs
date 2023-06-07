@@ -75,15 +75,15 @@ fn draw_scan_report(analyzer: &HealthAnalyzer) {
         let damage_name = match damage_type {
             DamageType::Asphyxiation => "Асфиксация",
             DamageType::Bloodloss => "Кровопотеря",
-            DamageType::Blunt => "Тупые раны",
-            DamageType::Cellular => "Повреждения клеток",
+            DamageType::Blunt => "Ударный урон",
+            DamageType::Cellular => "Клеточный урон",
             DamageType::Caustic => "Разъедающий урон",
-            DamageType::Cold => "Переохлаждение",
-            DamageType::Heat => "Перегрев",
+            DamageType::Cold => "Обморожение",
+            DamageType::Heat => "Ожоги",
             DamageType::Piercing => "Колотые раны",
             DamageType::Poison => "Отравление",
             DamageType::Radiation => "Радиационный фон",
-            DamageType::Shock => "Шоковый урон",
+            DamageType::Shock => "Шок",
             DamageType::Slash => "Порезы",
         };
 
@@ -98,7 +98,7 @@ fn draw_scan_report(analyzer: &HealthAnalyzer) {
                 color = Color::green();
             }
 
-            format!("{damage_name}: {damage}")
+            format!("{damage_name}: {damage:.1}")
         };
 
         let text = Text::new_dynamic(&text)
