@@ -16,7 +16,10 @@ use riscv::register::{
 };
 use riscv_rt::entry;
 use sgl::{
-    gpu::{Color, Point, Rect, TextAlign},
+    gpu::{
+        Boundable, BoundableExt, Color, MutBoundable, MutPositionable, Point, Positionable, Rect,
+        TextAlign,
+    },
     Image, Sgl, Text,
 };
 
@@ -33,38 +36,40 @@ extern "C" {
 
 #[global_allocator]
 static mut HEAP: Heap = Heap::empty();
-static mut PLUS_IMAGE: u64 = 0;
-static mut BIOHAZARD_IMAGE: u64 = 0;
+static mut PLUS_IMAGE: Option<Image> = None;
+static mut BIOHAZARD_IMAGE: Option<Image> = None;
 
 const FONT_SIZE: f64 = 14.0;
 
 fn draw_title_screen(label: &str) {
-    let sgl = Sgl::mut_sgl().as_mut().unwrap();
+    let sgl = Sgl::mut_get().as_mut().unwrap();
+
     let mut label = Text::new_dynamic(label)
         .with_size(Some(FONT_SIZE))
         .with_align(TextAlign::Center)
         .with_position(Point::new(sgl.bounds().hcenter(), 0.0))
         .with_color(Some(Color::green()));
 
-    let mut plus_image =
-        Image::new_from_raw(Rect::new_from_zero(281.0, 282.0), unsafe { PLUS_IMAGE })
-            .with_bounds(Rect::new_from_zero(120.0, 120.0));
+    let mut plus_image = unsafe { PLUS_IMAGE.clone().unwrap() };
 
     plus_image.translate_y(8.0);
     plus_image.translate_x(sgl.bounds().hcenter() - 120.0 / 2.0);
 
     sgl.fill_screen(Some(Color::black()));
 
-    plus_image.draw_rect(sgl);
+    sgl.draw_image_rect(
+        &plus_image,
+        Rect::new_from_position(plus_image.position(), 120.0, 120.0),
+    );
 
     label.translate_y(120.0 + FONT_SIZE * 2.0);
-    label.draw(sgl);
+    sgl.draw_text(&label);
 
-    sgl.flip_buffers();
+    sgl.flush();
 }
 
 fn draw_scan_report(analyzer: &HealthAnalyzer) {
-    let sgl = Sgl::mut_sgl().as_mut().unwrap();
+    let sgl = Sgl::mut_get().as_mut().unwrap();
     let mut pos = Point::new(4.0, 4.0);
     let mut max_string_width = 0.0;
 
@@ -105,27 +110,29 @@ fn draw_scan_report(analyzer: &HealthAnalyzer) {
             .with_color(Some(color))
             .with_position(pos)
             .with_size(Some(FONT_SIZE));
+        let text_size = sgl.measure_text_bounds(&text);
 
-        max_string_width = f64::max(max_string_width, text.mesaure_width(sgl));
-        text.draw(sgl);
+        max_string_width = f64::max(max_string_width, text_size.width());
+        sgl.draw_text(&text);
 
         pos.y += FONT_SIZE;
 
         if pos.y > sgl.bounds().height() {
-            pos.y = 4.8;
+            pos.y = 4.0;
             pos.x += max_string_width;
         }
     }
 
     if analyzer.has_disease() {
-        let biohazard = Image::new_from_raw(Rect::new_from_zero(431.0, 349.0), unsafe {
-            BIOHAZARD_IMAGE
-        })
-        .with_bounds(Rect::new_from_zero(160.0, 130.0))
-        .with_position(Point::new(
-            sgl.bounds().width() - 160.0 - 25.0,
-            sgl.bounds().vcenter() - 130.0 / 2.0 - 15.0,
-        ));
+        let biohazard =
+            unsafe { BIOHAZARD_IMAGE.clone().unwrap() }.with_bounds(Rect::new_from_position(
+                Point::new(
+                    sgl.bounds().width() - 160.0 - 25.0,
+                    sgl.bounds().vcenter() - 130.0 / 2.0 - 15.0,
+                ),
+                160.0,
+                130.0,
+            ));
 
         let mut text_position = Point::zero();
         text_position.x = biohazard.bounds().hcenter();
@@ -137,16 +144,16 @@ fn draw_scan_report(analyzer: &HealthAnalyzer) {
             .with_position(text_position)
             .with_size(Some(FONT_SIZE));
 
-        biohazard.draw_rect(sgl);
-        disease_text.draw(sgl);
+        sgl.draw_image_rect(&biohazard, biohazard.bounds().clone());
+        sgl.draw_text(&disease_text);
     }
 
-    sgl.flip_buffers();
+    sgl.flush();
 }
 
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
-    bsod::bsod_panic(Sgl::mut_sgl().as_mut().unwrap(), info);
+    bsod::bsod_panic(Sgl::mut_get().as_mut().unwrap(), info);
 }
 
 #[entry]
@@ -159,21 +166,10 @@ unsafe fn main() -> ! {
     );
 
     Sgl::default().init();
-    let sgl = Sgl::mut_sgl().as_mut().unwrap();
+    let sgl = Sgl::mut_get().as_mut().unwrap();
 
-    PLUS_IMAGE = Image::new(
-        include_asset!("plus.bitmap"),
-        Rect::new_from_zero(281.0, 282.0),
-        sgl,
-    )
-    .id();
-
-    BIOHAZARD_IMAGE = Image::new(
-        include_asset!("biohazard.bitmap"),
-        Rect::new_from_zero(431.0, 349.0),
-        sgl,
-    )
-    .id();
+    PLUS_IMAGE = Some(sgl.create_image(include_asset!("plus.bitmap"), 281, 282));
+    BIOHAZARD_IMAGE = Some(sgl.create_image(include_asset!("biohazard.bitmap"), 431, 349));
 
     draw_title_screen("Ожидание сканирования");
 
